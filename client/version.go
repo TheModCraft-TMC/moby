@@ -14,6 +14,13 @@ type ServerVersionOptions struct {
 
 // ServerVersionResult contains information about the Docker server host.
 type ServerVersionResult struct {
+	// Legacy engine diagnostics are returned separately from Components because
+	// older daemons have no component list and modern daemons may report both.
+	GitCommit     string
+	GoVersion     string
+	KernelVersion string
+	BuildTime     string
+
 	// Platform is the platform (product name) the server is running on.
 	Platform PlatformInfo
 
@@ -67,6 +74,10 @@ func (cli *Client) ServerVersion(ctx context.Context, _ ServerVersionOptions) (S
 	}
 
 	return ServerVersionResult{
+		GitCommit:     v.GitCommit,
+		GoVersion:     v.GoVersion,
+		KernelVersion: v.KernelVersion,
+		BuildTime:     v.BuildTime,
 		Platform: PlatformInfo{
 			Name: v.Platform.Name,
 		},
